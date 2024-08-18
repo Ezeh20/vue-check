@@ -1,7 +1,6 @@
 @import './base.css';
 
 .header {
-  position: relative;
   background: url('../assets/bg.jpg');
   height: 15rem;
   background-repeat: no-repeat;
@@ -25,4 +24,15 @@
 .text-a {
   resize: none;
   height: 100px;
+}
+
+.section2 {
+  display: flex;
+  justify-content: center;
+  margin-top: -22px;
+}
+
+.flex-base {
+  display: flex;
+  gap: 0.8rem;
 }
