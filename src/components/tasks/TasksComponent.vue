@@ -29,7 +29,7 @@ const toggleAddModal = () => {
             <span class="pi pi-plus icon-pi" @click="toggleAddModal"></span>
         </section>
     </main>
-    <ModalComponent :open="addModal">
+    <ModalComponent :open="addModal" :close="toggleAddModal">
         <form :class="`${styles.form}`">
             <div :class="`${styles.formField}`">
                 <label for="title" :class="`${styles.title}`">Title</label>
