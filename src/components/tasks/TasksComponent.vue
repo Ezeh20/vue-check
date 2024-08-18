@@ -63,10 +63,7 @@ const handleEditTask = () => {
     }
 };
 
-const handleDeleteTask = (idx) => {
-    db.tasks.splice(idx, 1); // Remove the task at the given index
-    localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks)); // Update localStorage
-};
+
 </script>
 
 <template>
@@ -82,9 +79,7 @@ const handleDeleteTask = (idx) => {
                 </div>
                 <div class="flex-base">
                     <span class="pi pi-pencil icon-pi-alt" @click="toggleEditModal(idx)"></span>
-                    <DeleteTask>
-                        <span class="pi pi-trash icn-delete" @click="handleDeleteTask(idx)"></span>
-                    </DeleteTask>
+                    <DeleteTask :db="db" :idx="idx" />
                 </div>
             </div>
 
