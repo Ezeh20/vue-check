@@ -26,6 +26,7 @@
 .input::placeholder {
   color: #bbc4eb;
   opacity: 0.6;
+  font-family: 'Montserrat', sans-serif;
 }
 .icon {
   color: #c9ccde;
