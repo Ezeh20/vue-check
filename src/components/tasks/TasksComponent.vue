@@ -17,6 +17,26 @@ if (locData) {
 const toggleAddModal = () => {
     addModal.value = !addModal.value
 }
+
+const form = reactive({
+    title: "",
+    desc: ""
+})
+
+const handleAddTask = () => {
+    const getLoc = localStorage.getItem("tasks-check-xyz");
+    let tasks = [];
+
+    if (getLoc) {
+        tasks = JSON.parse(getLoc);
+    }
+    const newTask = { ...form };
+
+    tasks.push(newTask);
+    localStorage.setItem("tasks-check-xyz", JSON.stringify(tasks));
+    form.title = "";
+    form.desc = "";
+}
 </script>
 
 <template>
@@ -30,15 +50,16 @@ const toggleAddModal = () => {
         </section>
     </main>
     <ModalComponent :open="addModal" :close="toggleAddModal">
-        <form :class="`${styles.form}`">
+        <form :class="`${styles.form}`" @submit.prevent="handleAddTask">
             <div :class="`${styles.formField}`">
                 <label for="title" :class="`${styles.title}`">Title</label>
-                <input type="text" name="title" :class="`${styles.input}`" />
+                <input id="title" v-model="form.title" type="text" name="title" :class="`${styles.input}`" />
             </div>
 
             <div :class="`${styles.formField}`">
-                <label for="title" :class="`${styles.title}`">Description</label>
-                <textarea type="text" name="title" :class="`${styles.input} text-a`"></textarea>
+                <label for="desc" :class="`${styles.title}`">Description</label>
+                <textarea id="desc" v-model="form.desc" type="text" name="title"
+                    :class="`${styles.input} text-a`"></textarea>
 
             </div>
 
