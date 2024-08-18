@@ -41,6 +41,10 @@ const toggleAddModal = () => {
                 <textarea type="text" name="title" :class="`${styles.input} text-a`"></textarea>
 
             </div>
+
+            <button type="submit" :class="`${styles.button}`">
+                Add task
+            </button>
         </form>
     </ModalComponent>
 </template>
