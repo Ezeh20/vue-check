@@ -39,6 +39,10 @@ const toggleEditModal = (idx) => {
 };
 
 const handleAddTask = () => {
+
+    if (!form.title && !form.title) {
+        return
+    }
     const newTask = { ...form };
     db.tasks.push(newTask);
     localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
@@ -47,13 +51,21 @@ const handleAddTask = () => {
 };
 
 const handleEditTask = () => {
-    if (editIdx.value !== null) {
+    if (!form.title && !form.title) {
+        return
+    }
+    else if (editIdx.value !== null) {
         db.tasks[editIdx.value] = { ...form };
         localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
         form.title = "";
         form.desc = "";
         editModal.value = !editModal.value;
     }
+};
+
+const handleDeleteTask = (idx) => {
+    db.tasks.splice(idx, 1); // Remove the task at the given index
+    localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks)); // Update localStorage
 };
 </script>
 
@@ -69,8 +81,10 @@ const handleEditTask = () => {
                     </div>
                 </div>
                 <div class="flex-base">
-                    <button @click="toggleEditModal(idx)">edit</button>
-                    <DeleteTask />
+                    <span class="pi pi-pencil icon-pi-alt" @click="toggleEditModal(idx)"></span>
+                    <DeleteTask>
+                        <span class="pi pi-trash icn-delete" @click="handleDeleteTask(idx)"></span>
+                    </DeleteTask>
                 </div>
             </div>
 

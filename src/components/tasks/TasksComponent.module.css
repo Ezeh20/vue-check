@@ -25,13 +25,14 @@
 }
 
 .title {
-  font-size: 14px;
+  font-size: 13px;
   color: #fdf7ff;
   text-transform: capitalize;
 }
 
 .desc {
   font-weight: 600;
+  font-size: 13px;
 }
 .input {
   backdrop-filter: blur(16px) saturate(180%);
