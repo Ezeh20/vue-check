@@ -1,6 +1,15 @@
-.main {
+.main{
+  width: 100%;
+}
+
+@media screen and (min-width: 550px) {
+  .main{
+    width: 500px;
+  }
+}
+
+.content {
   background-color: #25273c;
-  width: 500px;
   border-radius: 5px;
   display: flex;
   align-items: center;

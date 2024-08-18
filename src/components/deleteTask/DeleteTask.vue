@@ -8,8 +8,12 @@ const props = defineProps({
 
 const { db, idx } = props
 const handleDeleteTask = () => {
-     db.tasks.splice(idx, 1);
-     localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
+     const confirm = window.confirm("Do you want to delete this task?")
+
+     if (confirm) {
+          db.tasks.splice(idx, 1);
+          localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
+     }
 };
 </script>
 

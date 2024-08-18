@@ -1,8 +1,20 @@
+.heading{
+  text-align: left;
+  margin-bottom: 1rem;
+  color: #fdf7ff;
+}
+
 .main {
   background: #25273c;
-  width: 500px;
+  width: 100%;
   border-radius: 5px;
   padding: 1rem;
+}
+
+@media screen and (min-width: 550px) {
+  .main{
+    width: 500px;
+  }
 }
 
 .empty {
@@ -33,6 +45,8 @@
 .desc {
   font-weight: 600;
   font-size: 13px;
+width: 100%;
+word-break: break-all;
 }
 .input {
   backdrop-filter: blur(16px) saturate(180%);

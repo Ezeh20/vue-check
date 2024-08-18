@@ -12,7 +12,6 @@ const handleCompleteTask = () => {
     db.tasks[idx].completed = !db.tasks[idx].completed;
     localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
 };
-
 </script>
 
 <template>

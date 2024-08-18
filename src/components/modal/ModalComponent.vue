@@ -15,7 +15,7 @@ defineProps({
 </script>
 
 <template>
-    <main v-if="open" :class="`${styles.main}`">
+    <main v-if="open" :class="`${styles.main} container`">
         <section :class="`${styles.modalContainer}`">
             <section :class="`${styles.modalContent} ${open && styles.active}`">
                 <span class="pi pi-times icon-pi icn-right" @click="close"></span>

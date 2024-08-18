@@ -8,17 +8,17 @@
 }
 
 .modalContainer {
-    margin-top:150px;
+  margin-top:180px;
   height: 100%;
   display: flex;
-  width: 500px;
+  width: 100%;
   justify-content: center;
 }
 
 .modalContent {
   transition: all 600ms ease-in-out;
   opacity: 1;
-  width: 500px;
+  width: 100%;
   height: max-content;
   border-radius: 5px;
   padding: 1.5rem;
@@ -39,4 +39,11 @@
 .active {
   transform: translateY(0);
   opacity: 1;
+}
+
+
+@media screen and (min-width: 550px) {
+ .modalContainer,.modalContent{
+  width: 500px;
+ }
 }
