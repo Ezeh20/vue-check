@@ -39,11 +39,10 @@ const toggleEditModal = (idx) => {
 };
 
 const handleAddTask = () => {
-
     if (!form.title && !form.title) {
         return
     }
-    const newTask = { ...form };
+    const newTask = { ...form, completed: false };
     db.tasks.push(newTask);
     localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
     form.title = "";
@@ -62,8 +61,6 @@ const handleEditTask = () => {
         editModal.value = !editModal.value;
     }
 };
-
-
 </script>
 
 <template>
@@ -71,8 +68,8 @@ const handleEditTask = () => {
         <section v-if="db.tasks.length > 0" :class="`${styles.taskList}`">
             <div v-for="(task, idx) in db.tasks" :key="task.title" :class="`${styles.taskContainer}`">
                 <div class="flex-base">
-                    <TaskAction />
-                    <div :class="`${styles.taskContent}`">
+                    <TaskAction :db="db" :idx="idx" />
+                    <div :class="`${styles.taskContent} ${task.completed && styles.completed}`">
                         <p :class="`${styles.title}`">{{ task.title }}</p>
                         <p :class="`${styles.desc}`">{{ task.desc }}</p>
                     </div>
