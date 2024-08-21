@@ -6,6 +6,7 @@ import TaskAction from '../taskAction/TaskAction.vue';
 import DeleteTask from '../deleteTask/DeleteTask.vue';
 import SearchInput from '../search/SearchInput.vue';
 import truncateText from '@/utils/truncate';
+import { refreshTasks } from '@/utils/refresh';
 
 //refs
 const addModal = ref(false);
@@ -13,7 +14,7 @@ const editModal = ref(false);
 const editIdx = ref(null);
 const db = reactive({ tasks: [] });
 const text = ref('');
-const loading = ref(false);
+
 
 //reactive form binding
 const form = reactive({
@@ -29,13 +30,14 @@ onMounted(() => {
     }
 });
 
+
 //func to toggle the add task modal
 const toggleAddModal = () => {
     addModal.value = !addModal.value;
     form.title = "";
     form.desc = "";
-    loading.value = false;
 };
+
 
 /**
  * func to toggle the edit task modal
@@ -46,50 +48,48 @@ const toggleEditModal = (idx) => {
     editIdx.value = idx;
     editModal.value = !editModal.value;
     const task = db.tasks[editIdx.value];
-    form.title = task.title;
-    form.desc = task.desc
-    loading.value = false;
+    form.title = task?.title;
+    form.desc = task?.desc
 };
-
 
 // func to update the LS data
 const handleAddTask = () => {
     if (!form.title && !form.title) {
         return
     }
-    loading.value = true;
-    const timeout = setTimeout(() => {
-        const newTask = { ...form, completed: false };
-        db.tasks.push(newTask);
-        localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
-        form.title = "";
-        form.desc = "";
-        text.value = ""
-        addModal.value = !addModal.value;
-        text.value = ""
-    }, 1500)
-    return () => clearTimeout(timeout)
+    const lastId = db.tasks.length > 0 ? Math.max(...db.tasks.map(task => task.id || 0)) : 0;
+    const newTask = { ...form, completed: false, id: lastId + 1 };
+    db.tasks.push(newTask);
+    localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
+    form.title = "";
+    form.desc = "";
+    text.value = ""
+    addModal.value = !addModal.value;
+    text.value = ""
 };
 
 
 //get the particular task object using it's index, reassign the object with the current form state then set the new data
 const handleEditTask = () => {
-    if (!form.title && !form.title) {
-        return
+    if (!form.title) {
+        return;
     }
-    else if (editIdx.value !== null) {
-        loading.value = true;
-        const timeout = setTimeout(() => {
-            db.tasks[editIdx.value] = { ...form };
-            localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
-            form.title = "";
-            form.desc = "";
-            editModal.value = !editModal.value;
-        }, 1500)
-
-        return () => clearTimeout(timeout)
+    if (editIdx.value !== null) {
+        const task = db.tasks[editIdx.value];
+        db.tasks[editIdx.value] = {
+            ...task,
+            ...form,
+            completed: task.completed,
+            id: task.id,
+        };
+        localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
+        refreshTasks()
+        form.title = "";
+        form.desc = "";
+        editModal.value = !editModal.value;
     }
 };
+
 
 //func that returns the actual rendered data
 const filteredTasks = computed(() => {
@@ -104,14 +104,16 @@ const filteredTasks = computed(() => {
     <main>
         <section class="header">
             <h1 :class="`${styles.heading}`">Task Manager</h1>
-            <SearchInput v-model="text" />
+            <div v-if="db.tasks.length > 0">
+                <SearchInput v-model="text" />
+            </div>
         </section>
         <section class="section2 container">
             <section :class="`${styles.main}`">
                 <section v-if="filteredTasks.length > 0" :class="`${styles.taskList}`">
                     <div v-for="(task, idx) in filteredTasks" :key="task.title" :class="`${styles.taskContainer}`">
                         <div class="flex-base">
-                            <TaskAction :db="db" :idx="idx" />
+                            <TaskAction :db="db" :id="task?.id" />
                             <div :class="`${styles.taskContent} ${task.completed && styles.completed}`">
                                 <p :class="`${styles.title}`">{{ truncateText(task.title, 20) }}</p>
                                 <p :class="`${styles.desc}`">{{ truncateText(task.desc, 30) }}</p>
@@ -122,12 +124,11 @@ const filteredTasks = computed(() => {
                             <DeleteTask :db="db" :idx="idx" />
                         </div>
                     </div>
-
                     <button :class="`${styles.button}`" @click="toggleAddModal">New task</button>
                 </section>
                 <section v-else :class="`${styles.empty}`">
-                    <p>nothing here</p>
-                    <span class="pi pi-plus icon-pi" @click="toggleAddModal"></span>
+                    <p>Nothing here</p>
+                    <button @click="toggleAddModal" type="submit" :class="`${styles.button}`">Add a task</button>
                 </section>
             </section>
         </section>
@@ -142,7 +143,7 @@ const filteredTasks = computed(() => {
                 <label for="desc" :class="`${styles.title}`">Description</label>
                 <textarea id="desc" v-model="form.desc" name="desc" :class="`${styles.input} text-a`"></textarea>
             </div>
-            <button type="submit" :class="`${styles.button}`">{{ loading ? "Please wait...." : "Add task" }}</button>
+            <button type="submit" :class="`${styles.button}`">Add task</button>
         </form>
     </ModalComponent>
 
@@ -157,7 +158,7 @@ const filteredTasks = computed(() => {
                 <label for="desc" :class="`${styles.title}`">Description</label>
                 <textarea id="desc" v-model="form.desc" name="desc" :class="`${styles.input} text-a`"></textarea>
             </div>
-            <button type="submit" :class="`${styles.button}`">{{ loading ? "Please wait..." : "Edit task" }}</button>
+            <button type="submit" :class="`${styles.button}`">Edit task</button>
         </form>
     </ModalComponent>
 </template>

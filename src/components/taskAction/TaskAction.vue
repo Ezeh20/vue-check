@@ -1,19 +1,23 @@
 <script setup>
+import { refreshTasks } from "@/utils/refresh";
 import styles from "./TaskAction.module.css"
-import { defineProps} from "vue";
+import { defineProps } from "vue";
 
 const props = defineProps({
     db: Object,
-    idx: Number
+    id: Number
 })
 
-const { db, idx } = props
+const { db, id } = props
+const idx = db.tasks.findIndex((task) => task.id === id)
+
 const handleCompleteTask = () => {
-    db.tasks[idx].completed = !db.tasks[idx].completed;
+    db.tasks[idx].completed = !db.tasks[idx]?.completed;
     localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
+    refreshTasks()
 };
 </script>
 
 <template>
-    <div :class="`${styles.marker} ${db.tasks[idx].completed && styles.active}`" @click="handleCompleteTask"></div>
+    <div :class="`${styles.marker} ${db.tasks[idx]?.completed && styles.active}`" @click="handleCompleteTask"></div>
 </template>

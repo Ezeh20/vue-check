@@ -1,6 +1,6 @@
 <script setup>
+import { refreshTasks } from '@/utils/refresh';
 import { defineProps } from 'vue';
-
 const props = defineProps({
      db: Object,
      idx: Number
@@ -8,16 +8,12 @@ const props = defineProps({
 
 const { db, idx } = props
 const handleDeleteTask = () => {
-     const confirm = window.confirm("Do you want to delete this task?")
-
-     if (confirm) {
-          db.tasks.splice(idx, 1);
-          localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
-     }
+     db.tasks.splice(idx, 1);
+     localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
+     refreshTasks();
 };
 </script>
 
-
 <template>
-     <span class="pi pi-trash icn-delete" @click="handleDeleteTask(idx)"></span>
+     <span class="pi pi-trash icn-delete" @click="handleDeleteTask()"></span>
 </template>
