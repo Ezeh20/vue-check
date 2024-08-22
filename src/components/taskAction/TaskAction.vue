@@ -1,10 +1,13 @@
 <script setup>
 import { refreshTasks } from "@/utils/refresh";
-import styles from "./TaskAction.module.css"
+import styles from './TaskAction.module.css'
 import { defineProps } from "vue";
 
 const props = defineProps({
-    db: Object,
+    db: {
+        type: Object,
+        required: true
+    },
     id: Number
 })
 

@@ -1,8 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { refreshTasks } from '@/utils/refresh';
 import { defineProps } from 'vue';
+
 const props = defineProps({
-     db: Object,
+     db: {
+          type: Object,
+          required: true
+     },
      idx: Number
 })
 

@@ -7,6 +7,9 @@ import DeleteTask from '../deleteTask/DeleteTask.vue';
 import SearchInput from '../search/SearchInput.vue';
 import truncateText from '@/utils/truncate';
 import { refreshTasks } from '@/utils/refresh';
+import { useTitle } from '@vueuse/core';
+import { useTaskList } from '../../composables/taskList';
+const title = useTitle("Task manager")
 
 //refs
 const addModal = ref(false);
@@ -15,6 +18,8 @@ const editIdx = ref(null);
 const db = reactive({ tasks: [] });
 const text = ref('');
 
+
+const { filteredTasks } = useTaskList(text, db)
 
 //reactive form binding
 const form = reactive({
@@ -90,14 +95,6 @@ const handleEditTask = () => {
     }
 };
 
-
-//func that returns the actual rendered data
-const filteredTasks = computed(() => {
-    if (!text.value) return db.tasks;
-    return db.tasks.filter(task =>
-        task.title.toLowerCase().includes(text.value.toLowerCase())
-    );
-});
 </script>
 
 <template>
