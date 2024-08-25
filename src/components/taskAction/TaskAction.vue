@@ -2,8 +2,6 @@
 import { useToggleStatus } from '../../composables/toggleStatus';
 import styles from './TaskAction.module.css'
 import { defineProps } from "vue";
-import { TaskType } from '../../types';
-
 
 const props = defineProps({
     db: Object,
