@@ -6,9 +6,10 @@ import TaskAction from '../taskAction/TaskAction.vue';
 import DeleteTask from '../deleteTask/DeleteTask.vue';
 import SearchInput from '../search/SearchInput.vue';
 import truncateText from '@/utils/truncate';
-import { refreshTasks } from '@/utils/refresh';
 import { useTitle } from '@vueuse/core';
 import { useTaskList } from '../../composables/taskList';
+import { useAddTask } from '../../composables/addTask';
+import { useEditTask } from '../../composables/editTask';
 const title = useTitle("Task manager")
 
 //refs
@@ -18,8 +19,6 @@ const editIdx = ref(null);
 const db = reactive({ tasks: [] });
 const text = ref('');
 
-
-const { filteredTasks } = useTaskList(text, db)
 
 //reactive form binding
 const form = reactive({
@@ -43,7 +42,6 @@ const toggleAddModal = () => {
     form.desc = "";
 };
 
-
 /**
  * func to toggle the edit task modal
  * 
@@ -57,44 +55,9 @@ const toggleEditModal = (idx) => {
     form.desc = task?.desc
 };
 
-// func to update the LS data
-const handleAddTask = () => {
-    if (!form.title && !form.title) {
-        return
-    }
-    const lastId = db.tasks.length > 0 ? Math.max(...db.tasks.map(task => task.id || 0)) : 0;
-    const newTask = { ...form, completed: false, id: lastId + 1 };
-    db.tasks.push(newTask);
-    localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
-    form.title = "";
-    form.desc = "";
-    text.value = ""
-    addModal.value = !addModal.value;
-    text.value = ""
-};
-
-
-//get the particular task object using it's index, reassign the object with the current form state then set the new data
-const handleEditTask = () => {
-    if (!form.title) {
-        return;
-    }
-    if (editIdx.value !== null) {
-        const task = db.tasks[editIdx.value];
-        db.tasks[editIdx.value] = {
-            ...task,
-            ...form,
-            completed: task.completed,
-            id: task.id,
-        };
-        localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
-        refreshTasks()
-        form.title = "";
-        form.desc = "";
-        editModal.value = !editModal.value;
-    }
-};
-
+const { filteredTasks } = useTaskList(text, db)
+const { handleAddTask } = useAddTask(form, db, text, addModal)
+const { handleEditTask } = useEditTask(form, db, editIdx, editModal)
 </script>
 
 <template>
@@ -118,13 +81,13 @@ const handleEditTask = () => {
                         </div>
                         <div class="flex-base">
                             <span class="pi pi-pencil icon-pi-alt" @click="toggleEditModal(idx)"></span>
-                            <DeleteTask :db="db" :idx="idx" />
+                            <DeleteTask :db="db" :id="task?.id" />
                         </div>
                     </div>
                     <button :class="`${styles.button}`" @click="toggleAddModal">New task</button>
                 </section>
                 <section v-else :class="`${styles.empty}`">
-                    <p>Nothing here</p>
+                    <p>Nothing to see here</p>
                     <button @click="toggleAddModal" type="submit" :class="`${styles.button}`">Add a task</button>
                 </section>
             </section>

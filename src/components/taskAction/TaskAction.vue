@@ -1,26 +1,20 @@
-<script setup>
-import { refreshTasks } from "@/utils/refresh";
+<script setup lang="ts">
+import { useToggleStatus } from '../../composables/toggleStatus';
 import styles from './TaskAction.module.css'
 import { defineProps } from "vue";
+import { TaskType } from '../../types';
 
-const props = defineProps({
-    db: {
-        type: Object,
-        required: true
-    },
-    id: Number
-})
 
-const { db, id } = props
-const idx = db.tasks.findIndex((task) => task.id === id)
+const props = defineProps<{
+    db: { tasks: TaskType[] }
+    id: number
+}>()
 
-const handleCompleteTask = () => {
-    db.tasks[idx].completed = !db.tasks[idx]?.completed;
-    localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
-    refreshTasks()
-};
+const { db, id } = props;
+const { handleCompleteTask } = useToggleStatus(db, id)
 </script>
 
 <template>
-    <div :class="`${styles.marker} ${db.tasks[idx]?.completed && styles.active}`" @click="handleCompleteTask"></div>
+    <div :class="`${styles.marker} ${db.tasks.find(task => task.id === id)?.completed && styles.active}`"
+        @click="handleCompleteTask"></div>
 </template>

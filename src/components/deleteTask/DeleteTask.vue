@@ -1,21 +1,16 @@
 <script setup lang="ts">
-import { refreshTasks } from '@/utils/refresh';
+import { useDeleteTask } from '../../composables/deleteTask';
+import { TaskType } from '../../types';
 import { defineProps } from 'vue';
 
-const props = defineProps({
-     db: {
-          type: Object,
-          required: true
-     },
-     idx: Number
-})
+const props = defineProps<{
+  db: { tasks: TaskType[] };
+  id: number;
+}>();
 
-const { db, idx } = props
-const handleDeleteTask = () => {
-     db.tasks.splice(idx, 1);
-     localStorage.setItem("tasks-check-xyz", JSON.stringify(db.tasks));
-     refreshTasks();
-};
+
+const { db, id } = props;
+const { handleDeleteTask } = useDeleteTask(db, id);
 </script>
 
 <template>
