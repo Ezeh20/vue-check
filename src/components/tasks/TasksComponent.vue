@@ -87,8 +87,10 @@ const { handleEditTask } = useEditTask(form, db, editIdx, editModal)
                     <button :class="`${styles.button}`" @click="toggleAddModal">New task</button>
                 </section>
                 <section v-else :class="`${styles.empty}`">
-                    <p>Nothing to see here</p>
-                    <button @click="toggleAddModal" type="submit" :class="`${styles.button}`">Add a task</button>
+                    <p>{{ text.trim().length > 0 ? "No task found" : "Nothing to see here" }}</p>
+                    <button @click="toggleAddModal" type="submit" :class="`${styles.button}`">
+                        {{ text.trim().length > 0 ? "Add a new task" : "Add a task" }}
+                    </button>
                 </section>
             </section>
         </section>
