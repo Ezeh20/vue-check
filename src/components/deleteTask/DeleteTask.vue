@@ -1,12 +1,11 @@
-<script setup lang="ts">
+<script setup>
 import { useDeleteTask } from '../../composables/deleteTask';
-import { TaskType } from '../../types';
 import { defineProps } from 'vue';
 
-const props = defineProps<{
-  db: { tasks: TaskType[] };
-  id: number;
-}>();
+const props = defineProps({
+  db: Object,
+  id: Number
+})
 
 
 const { db, id } = props;
@@ -14,5 +13,5 @@ const { handleDeleteTask } = useDeleteTask(db, id);
 </script>
 
 <template>
-     <span class="pi pi-trash icn-delete" @click="handleDeleteTask()"></span>
+  <span class="pi pi-trash icn-delete" @click="handleDeleteTask()"></span>
 </template>
